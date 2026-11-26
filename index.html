@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Laporan Rekapitulasi Absensi Karyawan — PT. Multi Sarana Avindo (2026)</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            navy: {
+              850: '#132238',
+              900: '#0B172A',
+              950: '#070F1D',
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    @media print {
+      .no-print { display: none !important; }
+      body { background: #ffffff !important; }
+      .shadow-sm, .shadow-md, .shadow-lg { box-shadow: none !important; border: 1px solid #e2e8f0 !important; }
+    }
+    /* Custom scrollbar for clean tables */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans antialiased selection:bg-amber-200 selection:text-navy-900">
+
+  <!-- TOP EXECUTIVE HEADER BANNER -->
+  <header class="bg-gradient-to-r from-navy-950 via-navy-900 to-navy-850 text-white border-b-4 border-amber-500 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-400/30 text-amber-300 text-xs font-semibold tracking-wide uppercase mb-2">
+            <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+            Dashboard Eksekutif SDM • Periode Januari – Nopember 2026
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+            Laporan Rekapitulasi Absensi Karyawan
+          </h1>
+          <p class="text-slate-300 text-sm sm:text-base mt-1 font-medium">
+            PT. Multi Sarana Avindo di Bakungan • <span class="text-slate-400">17 Karyawan Aktif pada 4 Divisi Operasional (Data Desember Belum Tercatat)</span>
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2.5 no-print">
+          <button onclick="resetAllFilters()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm font-medium border border-white/15 transition cursor-pointer">
+            <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            Reset Filter
+          </button>
+          <button onclick="window.print()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-navy-950 text-sm font-bold shadow-md transition cursor-pointer">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+            Cetak / Simpan PDF
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- INTERACTIVE CONTROL BAR -->
+    <section class="bg-white rounded-2xl shadow-sm border border-slate-200/90 p-4 sm:p-5 no-print">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-2">
+          <svg class="w-4 h-4 text-navy-900" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+          Panel Filter & Kontrol Interaktif
+        </h2>
+        <span id="activeFilterSummary" class="text-xs font-medium text-navy-900 bg-slate-100 px-3 py-1 rounded-full">
+          Menampilkan: Semua Divisi • Jan – Nop 2026
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+        <!-- Filter Divisi -->
+        <div class="md:col-span-4">
+          <label for="divisionFilter" class="block text-xs font-semibold text-slate-700 mb-1.5">1. Pilih Divisi / Unit Kerja</label>
+          <select id="divisionFilter" class="w-full rounded-xl border border-slate-300 bg-slate-50 hover:bg-white focus:bg-white px-3.5 py-2.5 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-navy-900 transition">
+            <option value="ALL">Semua Divisi (17 Karyawan)</option>
+            <option value="OFFICE">OFFICE (8 Karyawan)</option>
+            <option value="OFFICE BOY DAN DRIVER">OFFICE BOY DAN DRIVER (2 Karyawan)</option>
+            <option value="PETUGAS CHF/PENGAPALAN">PETUGAS CHF/PENGAPALAN (4 Karyawan)</option>
+            <option value="PETUGAS KEAMANAN POS SIMPANG KTA">PETUGAS KEAMANAN POS SIMPANG KTA (3 Karyawan)</option>
+          </select>
+        </div>
+
+        <!-- Filter Rentang Bulan -->
+        <div class="md:col-span-3">
+          <label for="periodFilter" class="block text-xs font-semibold text-slate-700 mb-1.5">2. Rentang Waktu / Bulan</label>
+          <select id="periodFilter" class="w-full rounded-xl border border-slate-300 bg-slate-50 hover:bg-white focus:bg-white px-3.5 py-2.5 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-navy-900 transition">
+            <option value="ALL">Semua Bulan (Jan – Nop 2026)</option>
+            <option value="Q1">Kuartal 1 (Januari – Maret)</option>
+            <option value="Q2">Kuartal 2 (April – Juni)</option>
+            <option value="Q3">Kuartal 3 (Juli – September)</option>
+            <option value="Q4">Kuartal 4 (Oktober – Nopember)</option>
+            <optgroup label="Bulan Spesifik">
+              <option value="M_0">Januari 2026</option>
+              <option value="M_1">Pebruari 2026</option>
+              <option value="M_2">Maret 2026</option>
+              <option value="M_3">April 2026</option>
+              <option value="M_4">Mei 2026</option>
+              <option value="M_5">Juni 2026</option>
+              <option value="M_6">Juli 2026</option>
+              <option value="M_7">Agustus 2026</option>
+              <option value="M_8">September 2026</option>
+              <option value="M_9">Oktober 2026</option>
+              <option value="M_10">Nopember 2026</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <!-- Toggle Kategori Aktif -->
+        <div class="md:col-span-5">
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="block text-xs font-semibold text-slate-700">3. Isolasi / Filter Kategori Absensi</label>
+            <div class="flex gap-2">
+              <button type="button" onclick="setOnlyNonHadir()" class="text-[11px] font-semibold text-amber-700 hover:text-amber-900 underline cursor-pointer">Hanya Ketidakhadiran</button>
+              <span class="text-slate-300">|</span>
+              <button type="button" onclick="selectAllCategories()" class="text-[11px] font-semibold text-navy-900 hover:underline cursor-pointer">Semua</button>
+            </div>
+          </div>
+          <div id="categoryPills" class="flex flex-wrap gap-1.5">
+            <!-- Generated dynamically via JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DYNAMIC KPI SUMMARY CARDS -->
+    <section class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5">
+      <!-- KPI 1: Hadir -->
+      <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80 border-t-4 border-t-blue-600">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Hadir (H)</span>
+          <span class="px-2 py-0.5 text-[11px] font-bold rounded-md bg-blue-50 text-blue-700">Aktif</span>
+        </div>
+        <div id="kpiH" class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">4,056</div>
+        <p class="text-xs text-slate-500 mt-1">Total hari kerja hadir</p>
+      </div>
+
+      <!-- KPI 2: Tingkat Kehadiran -->
+      <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80 border-t-4 border-t-emerald-600">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Rasio Hadir</span>
+          <span class="px-2 py-0.5 text-[11px] font-bold rounded-md bg-emerald-50 text-emerald-700">%</span>
+        </div>
+        <div id="kpiRate" class="text-2xl sm:text-3xl font-extrabold text-emerald-700 mt-2">89.6%</div>
+        <p id="kpiTotalDays" class="text-xs text-slate-500 mt-1">Dari 4,525 hari tercatat</p>
+      </div>
+
+      <!-- KPI 3: Sakit -->
+      <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80 border-t-4 border-t-orange-500">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Sakit (S)</span>
+          <span class="px-2 py-0.5 text-[11px] font-bold rounded-md bg-orange-50 text-orange-700">Medis</span>
+        </div>
+        <div id="kpiS" class="text-2xl sm:text-3xl font-extrabold text-orange-600 mt-2">187</div>
+        <p id="kpiTopS" class="text-xs text-slate-500 mt-1 truncate">Tertinggi: Ideham Herman</p>
+      </div>
+
+      <!-- KPI 4: Cuti -->
+      <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80 border-t-4 border-t-violet-600">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Cuti (C)</span>
+          <span class="px-2 py-0.5 text-[11px] font-bold rounded-md bg-violet-50 text-violet-700">Hak Cuti</span>
+        </div>
+        <div id="kpiC" class="text-2xl sm:text-3xl font-extrabold text-violet-700 mt-2">160</div>
+        <p id="kpiTopC" class="text-xs text-slate-500 mt-1 truncate">Tertinggi: Devi Arianto</p>
+      </div>
+
+      <!-- KPI 5: Tugas Kapal -->
+      <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80 border-t-4 border-t-pink-600">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Tugas Kapal</span>
+          <span class="px-2 py-0.5 text-[11px] font-bold rounded-md bg-pink-50 text-pink-700">TK</span>
+        </div>
+        <div id="kpiTK" class="text-2xl sm:text-3xl font-extrabold text-pink-600 mt-2">72</div>
+        <p class="text-xs text-slate-500 mt-1 truncate">Unit CHF / Pengapalan</p>
+      </div>
+
+      <!-- KPI 6: Ijin & Alpa -->
+      <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80 border-t-4 border-t-amber-500">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Ijin & Alpa</span>
+          <span class="px-2 py-0.5 text-[11px] font-bold rounded-md bg-emerald-50 text-emerald-700">0 Alpa</span>
+        </div>
+        <div class="flex items-baseline gap-2 mt-2">
+          <span id="kpiI" class="text-2xl sm:text-3xl font-extrabold text-amber-600">50</span>
+          <span class="text-xs font-semibold text-slate-400">Ijin</span>
+          <span class="text-slate-300">/</span>
+          <span id="kpiA" class="text-xl font-extrabold text-red-600">0</span>
+          <span class="text-xs font-semibold text-slate-400">Alpa</span>
+        </div>
+        <p class="text-xs text-slate-500 mt-1">Zero mangkir tanpa kabar</p>
+      </div>
+    </section>
+
+    <!-- EXECUTIVE INSIGHT CALLOUT BANNER -->
+    <section class="bg-gradient-to-r from-amber-50 via-white to-slate-50 rounded-2xl border border-amber-200/90 p-4 sm:p-5 shadow-sm">
+      <div class="flex flex-col md:flex-row md:items-start gap-4">
+        <div class="w-10 h-10 rounded-xl bg-amber-500 text-navy-950 flex items-center justify-center shrink-0 font-bold shadow-sm">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <div class="flex-1">
+          <h3 class="text-sm font-bold text-navy-900">Sorotan Ringkasan Eksekutif untuk Pimpinan</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-2 text-xs sm:text-[13px] text-slate-700 leading-relaxed">
+            <div class="bg-white/80 rounded-xl p-3 border border-slate-200/70">
+              <span class="font-bold text-emerald-700 block mb-0.5">✓ Disiplin Kehadiran Tinggi (0 Alpa)</span>
+              Seluruh 17 karyawan mencatatkan <strong>0 hari Alpa</strong> selama Jan–Nop 2026. Kehadiran tertinggi pada <strong>Murdiansyah & Bunyamin (265 hr)</strong>.
+            </div>
+            <div class="bg-white/80 rounded-xl p-3 border border-orange-200/80">
+              <span class="font-bold text-orange-700 block mb-0.5">⚠ Perhatian Medis / Hari Sakit</span>
+              70% total hari sakit perusahaan terkonsentrasi pada <strong>Ideham Herman (85 hr; 23 hr/bln di Okt–Nop)</strong> dan <strong>Doni Ramos (46 hr)</strong>.
+            </div>
+            <div class="bg-white/80 rounded-xl p-3 border border-pink-200/80">
+              <span class="font-bold text-pink-700 block mb-0.5">⚓ Penugasan Kapal (TK = 72 Hari)</span>
+              Tugas Kapal eksklusif di divisi CHF/Pengapalan: <strong>Syahrial (27 hr)</strong>, <strong>Doni Ramos (26 hr)</strong>, dan <strong>Herliansyah (19 hr)</strong>.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAIN CHARTS GRID: EMPLOYEE COMPARISON + DRILL-DOWN -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <!-- LEFT: HORIZONTAL STACKED BAR COMPARISON -->
+      <div class="lg:col-span-7 bg-white rounded-2xl shadow-sm border border-slate-200/90 p-5 flex flex-col">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+          <div>
+            <h2 class="text-base sm:text-lg font-bold text-navy-900">Perbandingan Akumulasi per Karyawan</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Klik pada batang nama karyawan untuk melihat rincian bulanannya di panel kanan</p>
+          </div>
+          <div class="flex items-center gap-2 no-print">
+            <label for="sortChartBy" class="text-xs font-semibold text-slate-600 whitespace-nowrap">Urutkan:</label>
+            <select id="sortChartBy" class="rounded-xl border border-slate-300 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-navy-900">
+              <option value="id">No. Urut Absen (1–17)</option>
+              <option value="H_desc">Hadir (H) Tertinggi</option>
+              <option value="S_desc">Sakit (S) Tertinggi</option>
+              <option value="C_desc">Cuti (C) Tertinggi</option>
+              <option value="TK_desc">Tugas Kapal (TK) Tertinggi</option>
+              <option value="I_desc">Ijin (I) Tertinggi</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="relative flex-1 min-h-[480px] w-full">
+          <canvas id="employeeComparisonChart"></canvas>
+        </div>
+      </div>
+
+      <!-- RIGHT: INDIVIDUAL EMPLOYEE DRILL-DOWN PANEL -->
+      <div class="lg:col-span-5 bg-white rounded-2xl shadow-sm border border-slate-200/90 p-5 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between gap-2 mb-3">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-amber-600">Inspeksi Detail Individu</span>
+              <h2 class="text-base sm:text-lg font-bold text-navy-900">Grafik Bulanan per Karyawan</h2>
+            </div>
+            <span id="drilldownBadge" class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+              Kehadiran Sangat Baik
+            </span>
+          </div>
+
+          <!-- Employee Selector Dropdown -->
+          <div class="mb-3 no-print">
+            <label for="employeeSelect" class="sr-only">Pilih Karyawan</label>
+            <select id="employeeSelect" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm font-bold text-navy-900 focus:outline-none focus:ring-2 focus:ring-navy-900">
+              <!-- Populated via JS -->
+            </select>
+          </div>
+
+          <!-- Quick Pills for Filtered Employees -->
+          <div id="employeeQuickPills" class="flex flex-wrap gap-1.5 mb-4 max-h-20 overflow-y-auto pr-1 no-print">
+            <!-- Populated via JS -->
+          </div>
+
+          <!-- Selected Employee Summary Strip -->
+          <div id="drilldownStats" class="grid grid-cols-6 gap-1.5 bg-slate-50 border border-slate-200/80 rounded-xl p-2.5 mb-4 text-center">
+            <!-- Populated via JS -->
+          </div>
+
+          <!-- Monthly Stacked Column Chart for Selected Employee -->
+          <div class="relative h-[240px] w-full">
+            <canvas id="individualMonthlyChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Mini Monthly Breakdown Table for Selected Employee -->
+        <div class="mt-4 pt-3 border-t border-slate-200">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold text-slate-700">Rincian Angka Jan – Nop 2026</span>
+            <span id="drilldownDivisionLabel" class="text-[11px] font-semibold text-slate-500">DIVISI: OFFICE</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-[11px] text-center border-collapse">
+              <thead>
+                <tr class="bg-navy-900 text-white">
+                  <th class="py-1.5 px-1.5 text-left rounded-tl-lg">Kat.</th>
+                  <th class="py-1.5 px-1">Jan</th>
+                  <th class="py-1.5 px-1">Peb</th>
+                  <th class="py-1.5 px-1">Mar</th>
+                  <th class="py-1.5 px-1">Apr</th>
+                  <th class="py-1.5 px-1">Mei</th>
+                  <th class="py-1.5 px-1">Jun</th>
+                  <th class="py-1.5 px-1">Jul</th>
+                  <th class="py-1.5 px-1">Ags</th>
+                  <th class="py-1.5 px-1">Sep</th>
+                  <th class="py-1.5 px-1">Okt</th>
+                  <th class="py-1.5 px-1">Nop</th>
+                  <th class="py-1.5 px-1.5 bg-amber-500 text-navy-950 font-extrabold rounded-tr-lg">Tot</th>
+                </tr>
+              </thead>
+              <tbody id="drilldownMiniTable" class="divide-y divide-slate-200 font-medium">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MONTHLY AGGREGATE TREND CHART -->
+    <section class="bg-white rounded-2xl shadow-sm border border-slate-200/90 p-5">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+        <div>
+          <h2 class="text-base sm:text-lg font-bold text-navy-900">Tren Agregat Absensi Bulanan (Januari – Nopember 2026)</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Akumulasi total hari kerja seluruh karyawan pada divisi terpilih tiap bulan (Kolom Desember masih kosong)</p>
+        </div>
+        <div class="inline-flex rounded-xl bg-slate-100 p-1 no-print">
+          <button id="trendModeBar" onclick="setTrendChartType('bar')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-navy-900 shadow-sm transition cursor-pointer">
+            Grafik Batang Bertumpuk
+          </button>
+          <button id="trendModeLine" onclick="setTrendChartType('line')" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-navy-900 transition cursor-pointer">
+            Grafik Garis Tren
+          </button>
+        </div>
+      </div>
+      <div class="relative h-[280px] w-full">
+        <canvas id="monthlyTrendChart"></canvas>
+      </div>
+    </section>
+
+    <!-- INTERACTIVE RECAP TABLE -->
+    <section class="bg-white rounded-2xl shadow-sm border border-slate-200/90 overflow-hidden">
+      <div class="p-5 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-base sm:text-lg font-bold text-navy-900">Tabel Rekapitulasi Lengkap Karyawan</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Klik baris karyawan untuk menampilkan grafik bulanannya atau lihat rincian per bulan</p>
+        </div>
+        <div class="relative w-full sm:w-72 no-print">
+          <input type="text" id="tableSearchInput" placeholder="Cari nama karyawan atau divisi..." class="w-full pl-9 pr-3.5 py-2 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-navy-900" />
+          <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-navy-900 text-white text-xs uppercase tracking-wider">
+              <th class="py-3.5 px-4 font-bold">No</th>
+              <th class="py-3.5 px-4 font-bold">Nama Karyawan</th>
+              <th class="py-3.5 px-4 font-bold">Divisi</th>
+              <th class="py-3.5 px-3 text-center font-bold bg-blue-900/60">H</th>
+              <th class="py-3.5 px-3 text-center font-bold bg-amber-900/40">I</th>
+              <th class="py-3.5 px-3 text-center font-bold bg-orange-900/40">S</th>
+              <th class="py-3.5 px-3 text-center font-bold bg-red-900/40">A</th>
+              <th class="py-3.5 px-3 text-center font-bold bg-violet-900/40">C</th>
+              <th class="py-3.5 px-3 text-center font-bold bg-pink-900/40">TK</th>
+              <th class="py-3.5 px-3 text-center font-bold">Total</th>
+              <th class="py-3.5 px-4 font-bold">Tingkat Hadir</th>
+              <th class="py-3.5 px-4 font-bold">Evaluasi SDM</th>
+              <th class="py-3.5 px-4 text-center font-bold no-print">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="recapTableBody" class="divide-y divide-slate-200 text-xs sm:text-sm">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="text-center text-xs text-slate-500 py-4">
+      Laporan Rekapitulasi Absensi Karyawan • PT. Multi Sarana Avindo di Bakungan • Tahun 2026 (Periode Januari – Nopember)
+    </footer>
+  </main>
+
+  <!-- MODAL FOR FULL MONTHLY MATRIX POPUP -->
+  <div id="detailModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-navy-950/60 backdrop-blur-xs p-4">
+    <div class="bg-white rounded-2xl max-w-4xl w-full shadow-2xl border border-slate-200 overflow-hidden animate-fadeIn">
+      <div class="bg-navy-900 text-white px-6 py-4 flex items-center justify-between">
+        <div>
+          <span id="modalDivisi" class="text-[11px] font-bold uppercase tracking-wider text-amber-400">OFFICE</span>
+          <h3 id="modalTitle" class="text-lg font-bold">Rincian Absensi Bulanan</h3>
+        </div>
+        <button onclick="closeDetailModal()" class="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition cursor-pointer">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
+        <div id="modalSummaryBadges" class="flex flex-wrap gap-2"></div>
+        <div class="overflow-x-auto border border-slate-200 rounded-xl">
+          <table class="w-full text-xs text-center border-collapse">
+            <thead>
+              <tr class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                <th class="py-2.5 px-3 text-left">Kategori Status</th>
+                <th class="py-2.5 px-2">Jan</th>
+                <th class="py-2.5 px-2">Peb</th>
+                <th class="py-2.5 px-2">Mar</th>
+                <th class="py-2.5 px-2">Apr</th>
+                <th class="py-2.5 px-2">Mei</th>
+                <th class="py-2.5 px-2">Jun</th>
+                <th class="py-2.5 px-2">Jul</th>
+                <th class="py-2.5 px-2">Ags</th>
+                <th class="py-2.5 px-2">Sep</th>
+                <th class="py-2.5 px-2">Okt</th>
+                <th class="py-2.5 px-2">Nop</th>
+                <th class="py-2.5 px-2 text-slate-400">Des</th>
+                <th class="py-2.5 px-3 bg-navy-900 text-white">TOTAL</th>
+              </tr>
+            </thead>
+            <tbody id="modalMatrixBody" class="divide-y divide-slate-200"></tbody>
+          </table>
+        </div>
+        <p id="modalNotes" class="text-xs text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-200"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. COMPLETE VERIFIED DATASET (17 EMPLOYEES, 11 MONTHS JAN–NOP 2026)
+    // Array Order per Month: [H (Hadir), I (Ijin), S (Sakit), A (Alpa), C (Cuti), TK (Tugas Kapal)]
+    // =========================================================================
+    const MONTHS = ['Januari', 'Pebruari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'Nopember'];
+    const MONTHS_SHORT = ['Jan', 'Peb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nop'];
+
+    const CATEGORIES = [
+      { key: 'H',  idx: 0, label: 'H (Hadir)',       short: 'Hadir',       color: '#2563EB', bgLight: 'bg-blue-50',   textDark: 'text-blue-700',   border: 'border-blue-300' },
+      { key: 'I',  idx: 1, label: 'I (Ijin)',        short: 'Ijin',        color: '#EAB308', bgLight: 'bg-amber-50',  textDark: 'text-amber-700',  border: 'border-amber-300' },
+      { key: 'S',  idx: 2, label: 'S (Sakit)',       short: 'Sakit',       color: '#F97316', bgLight: 'bg-orange-50', textDark: 'text-orange-700', border: 'border-orange-300' },
+      { key: 'A',  idx: 3, label: 'A (Alpa)',        short: 'Alpa',        color: '#DC2626', bgLight: 'bg-red-50',    textDark: 'text-red-700',    border: 'border-red-300' },
+      { key: 'C',  idx: 4, label: 'C (Cuti)',        short: 'Cuti',        color: '#7C3AED', bgLight: 'bg-violet-50', textDark: 'text-violet-700', border: 'border-violet-300' },
+      { key: 'TK', idx: 5, label: 'TK (Tugas Kapal)',short: 'Tugas Kapal', color: '#DB2777', bgLight: 'bg-pink-50',   textDark: 'text-pink-700',   border: 'border-pink-300' }
+    ];
+
+    const EMPLOYEES = [
+      {
+        id: 1, name: "Firdaus Chandra G., A.Md.Ak.", division: "OFFICE",
+        months: [[22,2,1,0,0,0],[24,2,0,0,0,0],[20,1,0,0,0,0],[25,0,1,0,0,0],[22,0,1,0,0,0],[24,0,0,0,0,0],[24,0,2,0,0,0],[23,1,0,0,0,0],[26,0,1,0,0,0],[22,2,1,0,0,0],[24,1,1,0,0,0]]
+      },
+      {
+        id: 2, name: "Haraf Harris", division: "OFFICE",
+        months: [[22,1,0,0,2,0],[24,0,0,0,0,0],[17,0,0,0,5,0],[20,0,1,0,5,0],[22,0,0,0,1,0],[24,0,0,0,0,0],[24,1,1,0,0,0],[24,0,0,0,0,0],[27,0,0,0,0,0],[21,2,2,0,0,0],[26,0,1,0,0,0]]
+      },
+      {
+        id: 3, name: "Luky Galih Purwito, S.E.", division: "OFFICE",
+        months: [[24,0,0,0,1,0],[24,0,0,0,1,0],[17,0,0,0,5,0],[21,0,0,0,4,0],[22,0,0,0,1,0],[24,0,0,0,0,0],[26,0,0,0,0,0],[24,0,0,0,0,0],[26,0,1,0,0,0],[25,0,0,0,0,0],[27,0,0,0,0,0]]
+      },
+      {
+        id: 4, name: "Eka Patmawati, S.Pi.", division: "OFFICE",
+        months: [[21,0,1,0,3,0],[24,0,0,0,1,0],[21,0,0,0,1,0],[26,0,0,0,0,0],[20,1,1,0,1,0],[19,0,1,0,4,0],[26,0,0,0,0,0],[22,0,0,0,2,0],[27,0,0,0,0,0],[24,0,1,0,0,0],[26,0,1,0,0,0]]
+      },
+      {
+        id: 5, name: "Yulian Kurnia M., S.T.", division: "OFFICE",
+        months: [[24,1,0,0,0,0],[17,5,0,0,2,0],[19,0,0,0,3,0],[25,0,0,0,1,0],[23,0,0,0,0,0],[24,0,0,0,0,0],[23,1,0,0,2,0],[23,1,0,0,0,0],[27,0,0,0,0,0],[24,1,0,0,0,0],[26,1,0,0,0,0]]
+      },
+      {
+        id: 6, name: "M. Asy'ari, A.Md. Par.", division: "OFFICE",
+        months: [[24,0,1,0,0,0],[26,0,0,0,0,0],[18,0,0,0,4,0],[21,2,3,0,0,0],[21,0,1,0,1,0],[22,0,1,0,1,0],[26,0,0,0,0,0],[22,0,2,0,0,0],[26,0,1,0,0,0],[24,0,1,0,0,0],[19,0,1,0,6,0]]
+      },
+      {
+        id: 7, name: "Arief Aidil Juldha, S.Sos.", division: "OFFICE",
+        months: [[24,0,1,0,0,0],[22,0,4,0,0,0],[19,0,1,0,2,0],[25,1,0,0,0,0],[22,1,0,0,0,0],[21,0,1,0,2,0],[24,0,2,0,0,0],[22,0,1,0,1,0],[26,0,1,0,0,0],[22,2,1,0,0,0],[24,1,1,0,0,0]]
+      },
+      {
+        id: 8, name: "Ideham Herman", division: "OFFICE",
+        months: [[23,0,2,0,0,0],[19,0,7,0,0,0],[17,1,2,0,2,0],[20,1,5,0,0,0],[16,2,5,0,0,0],[17,2,5,0,0,0],[21,2,3,0,0,0],[20,0,4,0,0,0],[21,0,6,0,0,0],[2,0,23,0,0,0],[4,0,23,0,0,0]]
+      },
+      {
+        id: 9, name: "Murdiansyah", division: "OFFICE BOY DAN DRIVER",
+        months: [[23,0,0,0,2,0],[21,0,0,0,5,0],[20,0,0,0,2,0],[26,0,0,0,0,0],[23,0,0,0,0,0],[24,0,0,0,0,0],[25,1,0,0,0,0],[24,0,0,0,0,0],[27,0,0,0,0,0],[25,0,0,0,0,0],[27,0,0,0,0,0]]
+      },
+      {
+        id: 10, name: "Handrie Djohan", division: "OFFICE BOY DAN DRIVER",
+        months: [[21,0,0,0,5,0],[22,0,0,0,5,0],[16,0,1,0,4,0],[26,0,0,0,0,0],[23,0,0,0,0,0],[24,0,0,0,0,0],[26,0,0,0,0,0],[20,0,4,0,0,0],[26,0,1,0,0,0],[25,0,0,0,0,0],[27,0,0,0,0,0]]
+      },
+      {
+        id: 11, name: "Doni Ramos", division: "PETUGAS CHF/PENGAPALAN",
+        months: [[13,3,1,0,0,2],[13,1,2,0,0,7],[10,1,3,0,0,0],[9,0,3,0,7,0],[11,0,0,0,0,6],[14,0,3,0,0,0],[14,0,5,0,0,0],[10,0,3,0,0,5],[8,0,13,0,0,6],[12,0,6,0,0,0],[13,0,7,0,0,0]]
+      },
+      {
+        id: 12, name: "Herliansyah", division: "PETUGAS CHF/PENGAPALAN",
+        months: [[19,0,0,0,0,4],[23,0,0,0,3,0],[18,0,0,0,3,0],[21,0,0,0,0,4],[23,0,0,0,0,0],[17,0,0,0,0,4],[26,0,0,0,0,0],[23,1,0,0,0,0],[27,0,0,0,0,0],[14,1,0,0,0,7],[27,0,0,0,0,0]]
+      },
+      {
+        id: 13, name: "Devi Arianto", division: "PETUGAS CHF/PENGAPALAN",
+        months: [[22,1,1,0,0,0],[22,1,0,0,3,0],[11,0,0,0,10,0],[23,0,0,0,3,0],[22,0,1,0,0,0],[23,0,1,0,0,0],[26,0,0,0,0,0],[24,0,0,0,0,0],[26,0,1,0,0,0],[24,0,1,0,0,0],[26,0,1,0,0,0]]
+      },
+      {
+        id: 14, name: "Syahrial", division: "PETUGAS CHF/PENGAPALAN",
+        months: [[18,0,1,0,0,1],[2,0,0,0,13,4],[9,0,0,0,0,5],[19,0,0,0,0,0],[16,0,0,0,0,2],[16,0,0,0,0,2],[19,0,0,0,0,0],[22,0,0,0,0,0],[17,0,0,0,0,7],[17,0,0,0,0,3],[17,0,0,0,0,3]]
+      },
+      {
+        id: 15, name: "Soni Gama Sontana", division: "PETUGAS KEAMANAN POS SIMPANG KTA",
+        months: [[24,1,0,0,0,0],[26,0,0,0,0,0],[17,0,0,0,5,0],[21,0,0,0,5,0],[23,0,0,0,0,0],[24,0,0,0,0,0],[26,0,0,0,0,0],[24,0,0,0,0,0],[27,0,0,0,0,0],[25,0,0,0,0,0],[27,0,0,0,0,0]]
+      },
+      {
+        id: 16, name: "Bunyamin", division: "PETUGAS KEAMANAN POS SIMPANG KTA",
+        months: [[25,0,0,0,0,0],[22,0,0,0,4,0],[21,0,0,0,0,0],[26,0,0,0,0,0],[23,0,0,0,0,0],[24,0,0,0,0,0],[26,0,0,0,0,0],[24,0,0,0,0,0],[22,0,0,0,5,0],[25,0,0,0,0,0],[27,0,0,0,0,0]]
+      },
+      {
+        id: 17, name: "Achmad Ari Firmanto", division: "PETUGAS KEAMANAN POS SIMPANG KTA",
+        months: [[25,0,0,0,0,0],[20,0,0,0,6,0],[21,0,0,0,0,0],[26,0,0,0,0,0],[23,0,0,0,0,0],[24,0,0,0,0,0],[26,0,0,0,0,0],[24,0,0,0,0,0],[27,0,0,0,0,0],[25,0,0,0,0,0],[21,0,0,0,6,0]]
+      }
+    ];
+
+    // =========================================================================
+    // 2. APPLICATION STATE
+    // =========================================================================
+    const state = {
+      division: 'ALL',
+      period: 'ALL',
+      activeCategories: new Set(['H', 'I', 'S', 'A', 'C', 'TK']),
+      sortBy: 'id',
+      selectedEmployeeId: 1,
+      trendChartType: 'bar',
+      searchQuery: ''
+    };
+
+    let comparisonChart = null;
+    let individualChart = null;
+    let trendChart = null;
+
+    // =========================================================================
+    // 3. DATA HELPER FUNCTIONS
+    // =========================================================================
+    function getMonthIndices(period) {
+      if (period === 'ALL') return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+      if (period === 'Q1') return [0, 1, 2];
+      if (period === 'Q2') return [3, 4, 5];
+      if (period === 'Q3') return [6, 7, 8];
+      if (period === 'Q4') return [9, 10];
+      if (period.startsWith('M_')) return [parseInt(period.split('_')[1], 10)];
+      return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    }
+
+    function getFilteredEmployees() {
+      if (state.division === 'ALL') return EMPLOYEES;
+      return EMPLOYEES.filter(e => e.division === state.division);
+    }
+
+    function computeEmployeeTotals(emp, monthIndices) {
+      const sums = [0, 0, 0, 0, 0, 0];
+      monthIndices.forEach(mIdx => {
+        const arr = emp.months[mIdx];
+        for (let c = 0; c < 6; c++) {
+          sums[c] += arr[c];
+        }
+      });
+      const totalAll = sums.reduce((a, b) => a + b, 0);
+      const effectivePresent = sums[0] + sums[5]; // H + TK (Tugas Kapal is active duty)
+      const hadirPct = totalAll > 0 ? (sums[0] / totalAll) * 100 : 0;
+      const dutyPct = totalAll > 0 ? (effectivePresent / totalAll) * 100 : 0;
+      return {
+        H: sums[0],
+        I: sums[1],
+        S: sums[2],
+        A: sums[3],
+        C: sums[4],
+        TK: sums[5],
+        totalAll,
+        hadirPct,
+        dutyPct
+      };
+    }
+
+    function getEvaluationBadge(emp, totals) {
+      if (totals.S >= 20) {
+        return { text: 'Perhatian Medis (Sakit Tinggi)', cls: 'bg-orange-100 text-orange-800 border border-orange-300' };
+      }
+      if (totals.TK >= 15) {
+        return { text: 'Aktif Tugas Kapal (CHF)', cls: 'bg-pink-100 text-pink-800 border border-pink-300' };
+      }
+      if (totals.hadirPct >= 93) {
+        return { text: 'Sangat Baik (≥93%)', cls: 'bg-emerald-100 text-emerald-800 border border-emerald-300' };
+      }
+      return { text: 'Normal / Stabil', cls: 'bg-blue-50 text-blue-800 border border-blue-200' };
+    }
+
+    // =========================================================================
+    // 4. UI RENDERING: CATEGORY PILLS & KPI CARDS
+    // =========================================================================
+    function renderCategoryPills() {
+      const container = document.getElementById('categoryPills');
+      container.innerHTML = '';
+      CATEGORIES.forEach(cat => {
+        const isActive = state.activeCategories.has(cat.key);
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
+          isActive
+            ? `${cat.bgLight} ${cat.textDark} ${cat.border} shadow-2xs`
+            : 'bg-slate-100 text-slate-400 border-slate-200 opacity-65 hover:opacity-100'
+        }`;
+        btn.innerHTML = `
+          <span class="w-2.5 h-2.5 rounded-full" style="background-color:${isActive ? cat.color : '#94a3b8'}"></span>
+          ${cat.key} <span class="hidden sm:inline font-medium">(${cat.short})</span>
+        `;
+        btn.onclick = () => {
+          if (state.activeCategories.has(cat.key)) {
+            if (state.activeCategories.size > 1) {
+              state.activeCategories.delete(cat.key);
+            }
+          } else {
+            state.activeCategories.add(cat.key);
+          }
+          updateDashboard();
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    function updateKPICards(filteredEmps, monthIndices) {
+      let sumH = 0, sumI = 0, sumS = 0, sumA = 0, sumC = 0, sumTK = 0;
+      let maxS = { name: '-', val: 0 };
+      let maxC = { name: '-', val: 0 };
+
+      filteredEmps.forEach(emp => {
+        const t = computeEmployeeTotals(emp, monthIndices);
+        sumH += t.H;
+        sumI += t.I;
+        sumS += t.S;
+        sumA += t.A;
+        sumC += t.C;
+        sumTK += t.TK;
+        if (t.S > maxS.val) maxS = { name: emp.name.split(',')[0], val: t.S };
+        if (t.C > maxC.val) maxC = { name: emp.name.split(',')[0], val: t.C };
+      });
+
+      const totalDays = sumH + sumI + sumS + sumA + sumC + sumTK;
+      const rate = totalDays > 0 ? ((sumH / totalDays) * 100).toFixed(1) : '0.0';
+
+      document.getElementById('kpiH').textContent = sumH.toLocaleString('id-ID');
+      document.getElementById('kpiRate').textContent = `${rate}%`;
+      document.getElementById('kpiTotalDays').textContent = `Dari ${totalDays.toLocaleString('id-ID')} hari tercatat`;
+      document.getElementById('kpiS').textContent = sumS.toLocaleString('id-ID');
+      document.getElementById('kpiTopS').textContent = maxS.val > 0 ? `Tertinggi: ${maxS.name} (${maxS.val} hr)` : 'Tidak ada hari sakit';
+      document.getElementById('kpiC').textContent = sumC.toLocaleString('id-ID');
+      document.getElementById('kpiTopC').textContent = maxC.val > 0 ? `Tertinggi: ${maxC.name} (${maxC.val} hr)` : 'Tidak ada cuti';
+      document.getElementById('kpiTK').textContent = sumTK.toLocaleString('id-ID');
+      document.getElementById('kpiI').textContent = sumI.toLocaleString('id-ID');
+      document.getElementById('kpiA').textContent = sumA.toLocaleString('id-ID');
+
+      // Update filter summary badge
+      const divLabel = state.division === 'ALL' ? 'Semua Divisi' : state.division;
+      const periodSelect = document.getElementById('periodFilter');
+      const periodText = periodSelect.options[periodSelect.selectedIndex].text;
+      document.getElementById('activeFilterSummary').textContent = `${divLabel} • ${periodText}`;
+    }
+
+    // =========================================================================
+    // 5. CHART 1: HORIZONTAL STACKED BAR COMPARISON (ALL FILTERED EMPLOYEES)
+    // =========================================================================
+    function renderComparisonChart(filteredEmps, monthIndices) {
+      const enriched = filteredEmps.map(emp => ({
+        emp,
+        totals: computeEmployeeTotals(emp, monthIndices)
+      }));
+
+      // Sort logic
+      enriched.sort((a, b) => {
+        if (state.sortBy === 'H_desc') return b.totals.H - a.totals.H;
+        if (state.sortBy === 'S_desc') return b.totals.S - a.totals.S;
+        if (state.sortBy === 'C_desc') return b.totals.C - a.totals.C;
+        if (state.sortBy === 'TK_desc') return b.totals.TK - a.totals.TK;
+        if (state.sortBy === 'I_desc') return b.totals.I - a.totals.I;
+        return a.emp.id - b.emp.id;
+      });
+
+      const labels = enriched.map(item => `${item.emp.id}. ${item.emp.name}`);
+      const datasets = CATEGORIES
+        .filter(cat => state.activeCategories.has(cat.key))
+        .map(cat => ({
+          label: cat.label,
+          data: enriched.map(item => item.totals[cat.key]),
+          backgroundColor: cat.color,
+          borderRadius: 3,
+          barPercentage: 0.72,
+          categoryPercentage: 0.85
+        }));
+
+      const ctx = document.getElementById('employeeComparisonChart').getContext('2d');
+      if (comparisonChart) comparisonChart.destroy();
+
+      comparisonChart = new Chart(ctx, {
+        type: 'bar',
+        data: { labels, datasets },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          onClick: (event, elements) => {
+            if (elements && elements.length > 0) {
+              const idx = elements[0].index;
+              const clickedEmp = enriched[idx].emp;
+              state.selectedEmployeeId = clickedEmp.id;
+              updateDrilldownPanel(monthIndices);
+            }
+          },
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: { boxWidth: 12, usePointStyle: true, pointStyle: 'circle', font: { size: 11, weight: '600' } }
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+              backgroundColor: '#0B172A',
+              padding: 12,
+              titleFont: { size: 13, weight: 'bold' },
+              bodyFont: { size: 12 },
+              callbacks: {
+                afterBody: (items) => {
+                  const idx = items[0].dataIndex;
+                  const t = enriched[idx].totals;
+                  return `\nTotal Keseluruhan: ${t.totalAll} hari (${t.hadirPct.toFixed(1)}% Hadir)\n(Klik batang untuk detail bulanan)`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              stacked: true,
+              grid: { color: '#f1f5f9' },
+              ticks: { font: { size: 11 } },
+              title: { display: true, text: 'Jumlah Hari', font: { size: 11, weight: '600' }, color: '#64748b' }
+            },
+            y: {
+              stacked: true,
+              grid: { display: false },
+              ticks: {
+                font: { size: 11, weight: '600' },
+                color: '#1e293b'
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // =========================================================================
+    // 6. CHART 2 & PANEL: INDIVIDUAL EMPLOYEE DRILL-DOWN
+    // =========================================================================
+    function populateEmployeeSelectors(filteredEmps) {
+      const select = document.getElementById('employeeSelect');
+      const pills = document.getElementById('employeeQuickPills');
+
+      // Ensure selectedEmployeeId is within filteredEmps
+      if (!filteredEmps.some(e => e.id === state.selectedEmployeeId)) {
+        state.selectedEmployeeId = filteredEmps[0].id;
+      }
+
+      select.innerHTML = filteredEmps.map(e =>
+        `<option value="${e.id}" ${e.id === state.selectedEmployeeId ? 'selected' : ''}>${e.id}. ${e.name} — (${e.division})</option>`
+      ).join('');
+
+      pills.innerHTML = filteredEmps.map(e => {
+        const isSelected = e.id === state.selectedEmployeeId;
+        const shortName = e.name.split(',')[0].split(' ').slice(0, 2).join(' ');
+        return `
+          <button type="button" onclick="selectEmployee(${e.id})"
+            class="px-2.5 py-1 rounded-lg text-[11px] font-semibold transition cursor-pointer ${
+              isSelected
+                ? 'bg-navy-900 text-white shadow-xs'
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+            }">
+            ${e.id}. ${shortName}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function selectEmployee(empId) {
+      state.selectedEmployeeId = empId;
+      updateDrilldownPanel(getMonthIndices(state.period));
+    }
+
+    function updateDrilldownPanel(monthIndices) {
+      const filteredEmps = getFilteredEmployees();
+      populateEmployeeSelectors(filteredEmps);
+
+      const emp = EMPLOYEES.find(e => e.id === state.selectedEmployeeId) || filteredEmps[0];
+      const totals = computeEmployeeTotals(emp, monthIndices);
+      const badge = getEvaluationBadge(emp, totals);
+
+      const badgeEl = document.getElementById('drilldownBadge');
+      badgeEl.textContent = badge.text;
+      badgeEl.className = `px-2.5 py-1 rounded-full text-[11px] font-bold ${badge.cls}`;
+
+      document.getElementById('drilldownDivisionLabel').textContent = `DIVISI: ${emp.division}`;
+
+      // Summary strip (6 mini boxes)
+      const statsContainer = document.getElementById('drilldownStats');
+      statsContainer.innerHTML = CATEGORIES.map(cat => `
+        <div class="bg-white rounded-lg py-1.5 px-1 border border-slate-200/80">
+          <div class="text-[10px] font-bold text-slate-400">${cat.key}</div>
+          <div class="text-sm font-extrabold" style="color:${cat.color}">${totals[cat.key]}</div>
+        </div>
+      `).join('');
+
+      // Mini monthly matrix table (Jan - Nop)
+      const miniBody = document.getElementById('drilldownMiniTable');
+      miniBody.innerHTML = CATEGORIES.map(cat => {
+        let rowTotal = 0;
+        const cells = emp.months.map((mArr, mIdx) => {
+          const val = mArr[cat.idx];
+          rowTotal += val;
+          const isHighlighted = monthIndices.includes(mIdx);
+          const highlightCls = val > 0
+            ? `font-bold ${cat.textDark} ${cat.bgLight}`
+            : 'text-slate-300';
+          const dimCls = isHighlighted ? '' : 'opacity-35';
+          return `<td class="py-1 px-1 ${highlightCls} ${dimCls}">${val}</td>`;
+        }).join('');
+
+        return `
+          <tr>
+            <td class="py-1 px-1.5 text-left font-bold text-slate-700">${cat.key}</td>
+            ${cells}
+            <td class="py-1 px-1.5 font-extrabold bg-slate-100 text-navy-900">${rowTotal}</td>
+          </tr>
+        `;
+      }).join('');
+
+      // Render Individual Monthly Stacked Bar Chart
+      const datasets = CATEGORIES
+        .filter(cat => state.activeCategories.has(cat.key))
+        .map(cat => ({
+          label: cat.label,
+          data: emp.months.map(m => m[cat.idx]),
+          backgroundColor: emp.months.map((_, mIdx) =>
+            monthIndices.includes(mIdx) ? cat.color : `${cat.color}33`
+          ),
+          borderRadius: 3
+        }));
+
+      const ctx = document.getElementById('individualMonthlyChart').getContext('2d');
+      if (individualChart) individualChart.destroy();
+
+      individualChart = new Chart(ctx, {
+        type: 'bar',
+        data: { labels: MONTHS_SHORT, datasets },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+              backgroundColor: '#0B172A',
+              titleFont: { size: 12, weight: 'bold' },
+              bodyFont: { size: 11 }
+            }
+          },
+          scales: {
+            x: { stacked: true, grid: { display: false }, ticks: { font: { size: 10, weight: '600' } } },
+            y: { stacked: true, max: 30, grid: { color: '#f1f5f9' }, ticks: { stepSize: 10, font: { size: 10 } } }
+          }
+        }
+      });
+    }
+
+    // =========================================================================
+    // 7. CHART 3: AGGREGATE MONTHLY TREND CHART (JAN–NOP)
+    // =========================================================================
+    function setTrendChartType(type) {
+      state.trendChartType = type;
+      const btnBar = document.getElementById('trendModeBar');
+      const btnLine = document.getElementById('trendModeLine');
+      if (type === 'bar') {
+        btnBar.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-navy-900 shadow-sm transition cursor-pointer';
+        btnLine.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-navy-900 transition cursor-pointer';
+      } else {
+        btnLine.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-navy-900 shadow-sm transition cursor-pointer';
+        btnBar.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-navy-900 transition cursor-pointer';
+      }
+      renderMonthlyTrendChart(getFilteredEmployees(), getMonthIndices(state.period));
+    }
+
+    function renderMonthlyTrendChart(filteredEmps, monthIndices) {
+      const datasets = CATEGORIES
+        .filter(cat => state.activeCategories.has(cat.key))
+        .map(cat => {
+          const monthlyData = MONTHS.map((_, mIdx) =>
+            filteredEmps.reduce((sum, emp) => sum + emp.months[mIdx][cat.idx], 0)
+          );
+          if (state.trendChartType === 'line') {
+            return {
+              label: cat.label,
+              data: monthlyData,
+              borderColor: cat.color,
+              backgroundColor: cat.color,
+              borderWidth: 2.5,
+              tension: 0.3,
+              pointRadius: 4,
+              pointHoverRadius: 6,
+              fill: false
+            };
+          }
+          return {
+            label: cat.label,
+            data: monthlyData,
+            backgroundColor: MONTHS.map((_, mIdx) =>
+              monthIndices.includes(mIdx) ? cat.color : `${cat.color}33`
+            ),
+            borderRadius: 4
+          };
+        });
+
+      const ctx = document.getElementById('monthlyTrendChart').getContext('2d');
+      if (trendChart) trendChart.destroy();
+
+      const isBar = state.trendChartType === 'bar';
+      trendChart = new Chart(ctx, {
+        type: state.trendChartType,
+        data: { labels: MONTHS, datasets },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: { boxWidth: 12, usePointStyle: true, pointStyle: 'circle', font: { size: 11, weight: '600' } }
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+              backgroundColor: '#0B172A',
+              padding: 12
+            }
+          },
+          scales: {
+            x: { stacked: isBar, grid: { display: false }, ticks: { font: { size: 11, weight: '600' } } },
+            y: {
+              stacked: isBar,
+              grid: { color: '#f1f5f9' },
+              ticks: { font: { size: 11 } },
+              title: { display: true, text: 'Total Hari Karyawan', font: { size: 11, weight: '600' }, color: '#64748b' }
+            }
+          }
+        }
+      });
+    }
+
+    // =========================================================================
+    // 8. INTERACTIVE RECAP TABLE & DETAIL MODAL
+    // =========================================================================
+    function renderRecapTable(filteredEmps, monthIndices) {
+      const tbody = document.getElementById('recapTableBody');
+      const query = state.searchQuery.trim().toLowerCase();
+
+      const rows = filteredEmps.filter(emp =>
+        emp.name.toLowerCase().includes(query) || emp.division.toLowerCase().includes(query)
+      );
+
+      if (rows.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="13" class="py-8 text-center text-slate-400 font-medium">Tidak ada data karyawan yang sesuai dengan pencarian "${state.searchQuery}".</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = rows.map(emp => {
+        const t = computeEmployeeTotals(emp, monthIndices);
+        const badge = getEvaluationBadge(emp, t);
+        const barColor = t.hadirPct >= 92 ? 'bg-emerald-500' : (t.hadirPct >= 80 ? 'bg-blue-600' : 'bg-orange-500');
+
+        return `
+          <tr onclick="selectEmployee(${emp.id})" class="hover:bg-blue-50/50 transition cursor-pointer group">
+            <td class="py-3 px-4 font-bold text-slate-500">${emp.id}</td>
+            <td class="py-3 px-4 font-bold text-navy-900 group-hover:text-blue-700">${emp.name}</td>
+            <td class="py-3 px-4">
+              <span class="inline-block px-2 py-0.5 rounded-md text-[11px] font-semibold bg-slate-100 text-slate-700">${emp.division}</span>
+            </td>
+            <td class="py-3 px-3 text-center font-extrabold text-blue-700 bg-blue-50/30">${t.H}</td>
+            <td class="py-3 px-3 text-center font-semibold ${t.I > 0 ? 'text-amber-700' : 'text-slate-300'}">${t.I}</td>
+            <td class="py-3 px-3 text-center font-bold ${t.S >= 10 ? 'text-orange-600 bg-orange-50' : (t.S > 0 ? 'text-orange-600' : 'text-slate-300')}">${t.S}</td>
+            <td class="py-3 px-3 text-center font-semibold text-slate-300">${t.A}</td>
+            <td class="py-3 px-3 text-center font-semibold ${t.C > 0 ? 'text-violet-700' : 'text-slate-300'}">${t.C}</td>
+            <td class="py-3 px-3 text-center font-bold ${t.TK > 0 ? 'text-pink-600 bg-pink-50/50' : 'text-slate-300'}">${t.TK}</td>
+            <td class="py-3 px-3 text-center font-extrabold text-slate-800">${t.totalAll}</td>
+            <td class="py-3 px-4 w-36">
+              <div class="flex items-center gap-2">
+                <div class="flex-1 h-2 bg-slate-200 rounded-full overflow-hidden">
+                  <div class="h-full ${barColor} rounded-full" style="width:${t.hadirPct.toFixed(1)}%"></div>
+                </div>
+                <span class="text-xs font-bold text-slate-700 w-11 text-right">${t.hadirPct.toFixed(1)}%</span>
+              </div>
+            </td>
+            <td class="py-3 px-4">
+              <span class="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold ${badge.cls}">${badge.text}</span>
+            </td>
+            <td class="py-3 px-4 text-center no-print">
+              <button type="button" onclick="event.stopPropagation(); openDetailModal(${emp.id})"
+                class="px-2.5 py-1 rounded-lg bg-navy-900 hover:bg-blue-700 text-white text-[11px] font-semibold transition cursor-pointer">
+                Detail Tabel
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function openDetailModal(empId) {
+      const emp = EMPLOYEES.find(e => e.id === empId);
+      if (!emp) return;
+      const totals = computeEmployeeTotals(emp, [0,1,2,3,4,5,6,7,8,9,10]);
+
+      document.getElementById('modalDivisi').textContent = `NO. ${emp.id} • DIVISI ${emp.division}`;
+      document.getElementById('modalTitle').textContent = emp.name;
+
+      document.getElementById('modalSummaryBadges').innerHTML = CATEGORIES.map(cat => `
+        <span class="px-3 py-1 rounded-xl text-xs font-bold border ${cat.bgLight} ${cat.textDark} ${cat.border}">
+          ${cat.label}: ${totals[cat.key]} hari
+        </span>
+      `).join('');
+
+      document.getElementById('modalMatrixBody').innerHTML = CATEGORIES.map(cat => {
+        let sum = 0;
+        const cells = emp.months.map(m => {
+          const val = m[cat.idx];
+          sum += val;
+          return `<td class="py-2 px-2 ${val > 0 ? `font-bold ${cat.textDark} ${cat.bgLight}` : 'text-slate-300'}">${val}</td>`;
+        }).join('');
+        return `
+          <tr>
+            <td class="py-2 px-3 text-left font-bold text-slate-800">${cat.label}</td>
+            ${cells}
+            <td class="py-2 px-2 text-slate-300 italic">-</td>
+            <td class="py-2 px-3 font-extrabold bg-slate-100 text-navy-900">${sum}</td>
+          </tr>
+        `;
+      }).join('');
+
+      document.getElementById('modalNotes').innerHTML = `
+        <strong>Catatan Ringkas:</strong> Selama periode Januari – Nopember 2026, <strong>${emp.name}</strong> mencatatkan total <strong>${totals.totalAll} hari</strong> kalender absensi dengan tingkat kehadiran efektif <strong>${totals.hadirPct.toFixed(1)}%</strong> (${totals.H} hari Hadir${totals.TK > 0 ? ` + ${totals.TK} hari Tugas Kapal` : ''}) dan <strong>0 hari Alpa</strong>.
+      `;
+
+      const modal = document.getElementById('detailModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeDetailModal() {
+      const modal = document.getElementById('detailModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    // =========================================================================
+    // 9. FILTER CONTROLS & MASTER UPDATE LOOP
+    // =========================================================================
+    function setOnlyNonHadir() {
+      state.activeCategories = new Set(['I', 'S', 'A', 'C', 'TK']);
+      updateDashboard();
+    }
+
+    function selectAllCategories() {
+      state.activeCategories = new Set(['H', 'I', 'S', 'A', 'C', 'TK']);
+      updateDashboard();
+    }
+
+    function resetAllFilters() {
+      state.division = 'ALL';
+      state.period = 'ALL';
+      state.activeCategories = new Set(['H', 'I', 'S', 'A', 'C', 'TK']);
+      state.sortBy = 'id';
+      state.searchQuery = '';
+      document.getElementById('divisionFilter').value = 'ALL';
+      document.getElementById('periodFilter').value = 'ALL';
+      document.getElementById('sortChartBy').value = 'id';
+      document.getElementById('tableSearchInput').value = '';
+      updateDashboard();
+    }
+
+    function updateDashboard() {
+      const filteredEmps = getFilteredEmployees();
+      const monthIndices = getMonthIndices(state.period);
+
+      renderCategoryPills();
+      updateKPICards(filteredEmps, monthIndices);
+      renderComparisonChart(filteredEmps, monthIndices);
+      updateDrilldownPanel(monthIndices);
+      renderMonthlyTrendChart(filteredEmps, monthIndices);
+      renderRecapTable(filteredEmps, monthIndices);
+    }
+
+    // Event Listeners
+    document.getElementById('divisionFilter').addEventListener('change', (e) => {
+      state.division = e.target.value;
+      updateDashboard();
+    });
+
+    document.getElementById('periodFilter').addEventListener('change', (e) => {
+      state.period = e.target.value;
+      updateDashboard();
+    });
+
+    document.getElementById('sortChartBy').addEventListener('change', (e) => {
+      state.sortBy = e.target.value;
+      renderComparisonChart(getFilteredEmployees(), getMonthIndices(state.period));
+    });
+
+    document.getElementById('employeeSelect').addEventListener('change', (e) => {
+      state.selectedEmployeeId = parseInt(e.target.value, 10);
+      updateDrilldownPanel(getMonthIndices(state.period));
+    });
+
+    document.getElementById('tableSearchInput').addEventListener('input', (e) => {
+      state.searchQuery = e.target.value;
+      renderRecapTable(getFilteredEmployees(), getMonthIndices(state.period));
+    });
+
+    // Close modal on backdrop click
+    document.getElementById('detailModal').addEventListener('click', (e) => {
+      if (e.target.id === 'detailModal') closeDetailModal();
+    });
+
+    // Initialize on load
+    window.addEventListener('DOMContentLoaded', () => {
+      updateDashboard();
+    });
+  </script>
+</body>
+</html>
